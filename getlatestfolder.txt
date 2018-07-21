@@ -1,0 +1,41 @@
+Public Function GetLastModifiedFile(ByVal sFolderPath)
+
+  Dim FSO, objFolder, objFile
+
+  Dim objFileResult, longDateTime
+
+  Dim boolRC
+
+  Set FSO = CreateObject("Scripting.FileSystemObject")
+
+  Set objFolder = FSO.GetFolder(sFolderPath)
+
+  Set objFileResult = Nothing
+
+  longDateTime = CDate(0)
+
+  For Each objFile in objFolder.SubFolders
+
+    If objFile.DateLastModified > longDateTime Then
+
+      Set objFileResult = objFile
+
+      longDateTime = objFile.DateLastModified
+
+    End If
+
+  Next
+
+  
+
+  Set FSO = Nothing
+
+  Set objFolder = Nothing
+
+  Set GetLastModifiedFile = objFileResult
+
+ 
+
+End Function
+
+msgbox  GetLastModifiedFile("C:\Phase1MaintenanceDelivery\AutomationReview\ExecutionLogs\")

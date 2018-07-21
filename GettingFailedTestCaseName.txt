@@ -1,0 +1,44 @@
+Function GettingFailedTestCaseName()
+		
+		g_dFile = GetExpectDataFromSheet("CurrentQCResultPath",Env_sGlobalDataSheetPath,"CurrentExecutionValues")
+
+		Set objExcel = CreateObject("Excel.Application")	
+		objExcel.Application.Visible = False
+		Set ObjWorkbook = objExcel.Workbooks.Open(g_dFile)
+		Set ObjWorkSheet = ObjWorkbook.Worksheets("MappingSheet")
+		usedColumnsCount = ObjWorkSheet.UsedRange.Columns.Count
+		usedRowsCount = ObjWorkSheet.UsedRange.Rows.Count 
+		
+		For k = 1 to usedColumnsCount
+			If (LCase(ObjWorkSheet.Cells(1,k).value) = "iteration_status") Then
+				iStatusColIndex = k
+			End If
+			If (LCase(ObjWorkSheet.Cells(1,k).value) = "testcasename") Then
+				iTestCaseColIndex = k
+			End If
+		Next
+	
+		FailedTestCaseName = Empty
+		
+		For iRow = 2 To usedRowsCount
+			strStatus = LCase(ObjWorkSheet.Cells(iRow,iStatusColIndex).Value)
+			strTestCaseName = ObjWorkSheet.Cells(iRow,iTestCaseColIndex).Value
+			If (strStatus = "failed") Then
+				If FailedTestCaseName <> Empty Then
+				FailedTestCaseName = FailedTestCaseName & "#" & strTestCaseName
+				Else
+				FailedTestCaseName = strTestCaseName
+				End If
+			End If
+		Next
+		
+		GettingFailedTestCaseName = FailedTestCaseName
+		
+		objExcel.Workbooks.Close
+		objExcel.Quit
+		Set ObjWorkbook = Nothing
+		Set ObjWorkSheet = Nothing
+		Set objExcel = Nothing
+
+	End Function
+	

@@ -1,0 +1,56 @@
+Function CopyFileFromLocation(strBuildPath,strDestinationPath)
+   Set oFso = CreateObject("Scripting.FileSystemObject")
+	If (oFso.FileExists(strBuildPath)) Then
+			oFso.CopyFile strBuildPath,strDestinationPath,True		
+	Else
+	
+		msgbox "file not found"		
+	End If
+	
+	   Set oFso = Nothing
+End Function
+
+
+Sub Unzip(sSource, sTargetDir)
+    Set oFSO = CreateObject("Scripting.FileSystemObject")
+    if not oFSO.FolderExists(sTargetDir) then oFSO.CreateFolder(sTargetDir)
+    Set oShell = CreateObject("Shell.Application")
+	
+    Set oSource = oShell.NameSpace(sSource).Items()
+    Set oTarget = oShell.NameSpace(sTargetDir)
+    oTarget.CopyHere oSource,16
+	Set oFso = Nothing
+End Sub
+
+
+
+
+
+
+
+
+
+strBuildPath = "C:\peeyush\notepad\[Untitled].zip"
+strDestinationPath = "C:\peeyush\notepad\zip\"
+'
+''''' copy file
+Call CopyFileFromLocation(strBuildPath,strDestinationPath)
+
+strBuildPath = Split(strBuildPath,"\")
+iUpperBound = UBound(strBuildPath)
+strBuildPath1 = strBuildPath(iUpperBound)
+strUnzipFileSourcePath =  strDestinationPath  & strBuildPath1
+strUnzipFilepath = "C:\peeyush\notepad\zip\"
+
+
+''''unzip file
+
+Unzip strUnzipFileSourcePath,strUnzipFilepath
+
+
+
+
+
+
+
+
